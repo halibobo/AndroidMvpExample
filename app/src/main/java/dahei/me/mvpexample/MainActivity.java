@@ -19,6 +19,7 @@ import java.util.Random;
 
 import dahei.me.mvpexample.data.Phone;
 import dahei.me.mvpexample.data.PhoneFactory;
+import dahei.me.mvpexample.tasks.TaskPresenter;
 
 public class MainActivity extends AppCompatActivity implements OperationView {
 
@@ -26,7 +27,7 @@ public class MainActivity extends AppCompatActivity implements OperationView {
 
     private Button btnCreate;
 
-    private PhonePresenter phonePresenter;
+    private TaskPresenter phonePresenter;
 
     private ProgressDialog mLoadingDialog;
     ArrayAdapter<Phone> arrayAdapter;
@@ -38,16 +39,14 @@ public class MainActivity extends AppCompatActivity implements OperationView {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        PhoneFactory phoneFactory = new PhoneFactory();
-        phoneFactory.createPhone("nokia",555);
-        phonePresenter = new PhonePresenter(phoneFactory, this);
+        phonePresenter = new PhonePresenter( this);
         btnCreate = (Button) findViewById(R.id.btnCreate);
         listView = (ListView) findViewById(R.id.listView);
-        arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, phoneFactory.getPhonesList());
+        arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, phonePresenter.getPhonesList());
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                phonePresenter.addPhone(new Phone("iphone", 4000+ new Random().nextInt(1000)));
+                phonePresenter.addRandomPhone();
             }
         });
 
@@ -81,6 +80,8 @@ public class MainActivity extends AppCompatActivity implements OperationView {
         findViewById(R.id.noPhone).setVisibility(View.VISIBLE);
     }
 
+
+
     @Override
     public void showFactoryBusy() {
         showToast("工厂繁忙，请稍后再试！");
@@ -93,6 +94,10 @@ public class MainActivity extends AppCompatActivity implements OperationView {
         }
         mLoadingDialog = null;
         showToast("新生产出一台手机！");
+    }
+
+    @Override
+    public void hideNoPhone() {
         findViewById(R.id.noPhone).setVisibility(View.GONE);
     }
 

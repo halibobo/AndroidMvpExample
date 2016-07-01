@@ -9,6 +9,7 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by su on 2016/6/22.
@@ -22,10 +23,11 @@ public class PhonePresenter implements TaskPresenter{
     private static final int msgWhat = 0x102;
 
 
-    public PhonePresenter(@NonNull PhoneFactory phoneFactory, @NonNull OperationView operationView) {
-        this.phoneFactory = phoneFactory;
+    public PhonePresenter( @NonNull OperationView operationView) {
+        this.phoneFactory = new PhoneFactory();
         this.operationView = operationView;
     }
+
 
     @Override
     public void addPhone(Phone phone) {
@@ -50,6 +52,15 @@ public class PhonePresenter implements TaskPresenter{
         operationView.showPhoneCountChange();
     }
 
+    public ArrayList<Phone> getPhonesList() {
+        return phoneFactory.getPhonesList();
+    }
+
+    @Override
+    public void addRandomPhone() {
+        addPhone(new Phone("iphone", 4000 + new Random().nextInt(1000)));
+    }
+
     @Override
     public void removePhone(Phone phone) {
 
@@ -70,6 +81,7 @@ public class PhonePresenter implements TaskPresenter{
             phoneFactory.addPhone((Phone)msg.obj);
             operationView.showCreatedPhone();
             operationView.showPhoneCountChange();
+            operationView.hideNoPhone();
         }
     };
 }

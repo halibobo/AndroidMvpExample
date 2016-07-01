@@ -1,5 +1,7 @@
 package dahei.me.mvpexample.tasks;
 
+import java.util.ArrayList;
+
 import dahei.me.mvpexample.data.Phone;
 
 /**
@@ -11,4 +13,8 @@ public interface TaskPresenter {
     void removePhone(Phone phone);
 
     void removePhone(int index);
+
+    ArrayList<Phone> getPhonesList();
+
+    void addRandomPhone();
 }
